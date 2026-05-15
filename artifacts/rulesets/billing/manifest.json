@@ -4,15 +4,15 @@
   "keyId": "operator-2026-05",
   "latest": "2026-05-01.r1",
   "minSupported": "2026-05-01.r1",
-  "published": "2026-05-15T14:17:26+09:00",
-  "signature": "ed25519:xxwr7t23MEPXFFrGYtIDDwPUKu6Acgt+mFXQ2CPjtewFV8kFYSFZk2UVYUm1un8stUsYGdb2tfxUugf9pjT6Cw==",
+  "published": "2026-05-15T14:21:45+09:00",
+  "signature": "ed25519:9AajZCigctp4gKWR+ILc2g7QvynmJr5DTaBMyH5kDjkrYom+CFD/FGd8/0VKu0jM/5+7y53g2qVvtRRFFJ9tAw==",
   "snapshots": [
     {
       "version": "2026-05-01.r1",
       "effectiveFrom": "2026-05-01",
-      "publishedAt": "2026-05-15T14:17:26+09:00",
-      "size": 2147,
-      "hash": "sha256:1c9a5be2df73ba7c0236c37e25c4ac1d99b3832730d95843598448d8580e531a",
+      "publishedAt": "2026-05-15T14:21:45+09:00",
+      "size": 1927,
+      "hash": "sha256:5030161b082f689843024dfc1a283e60910a5f7b40d46155820cefa484e647bb",
       "url": "snapshots/2026-05-01.r1.jsonl.zst",
       "prevVersion": null,
       "prevHash": null
