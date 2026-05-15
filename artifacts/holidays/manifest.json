@@ -1,18 +1,18 @@
 {
   "spec": "openpharm.sync.manifest.v1",
   "channel": "holidays",
-  "keyId": "UNSIGNED",
+  "keyId": "operator-2026-05",
   "latest": "2026.r1",
   "minSupported": "2026.r1",
-  "published": "2026-05-15T09:56:11+09:00",
-  "signature": "UNSIGNED",
+  "published": "2026-05-15T10:29:43+09:00",
+  "signature": "ed25519:T3QWszu/cZwsfqYE+d2Jal+mcGIomo+wqcrip7FAf6iX5oskY6lZ3aLpw9xBy4MYpvWXLWD4TZ2qkj+k8GJ9Cw==",
   "snapshots": [
     {
       "version": "2026.r1",
       "effectiveFrom": "2026-01-01",
-      "publishedAt": "2026-05-15T09:56:11+09:00",
-      "size": 507,
-      "hash": "sha256:a14219409cb59df58299ce3bd7b0224b24392145c27f0cfd3f580e908a008259",
+      "publishedAt": "2026-05-15T10:29:43+09:00",
+      "size": 508,
+      "hash": "sha256:b6819cfb0a46fd4a272402d8be690123a4fb27126690189040784cc474a45224",
       "url": "snapshots/2026.r1.jsonl.zst",
       "prevVersion": null,
       "prevHash": null
