@@ -1,0 +1,9 @@
+{
+  "spec": "openpharm.sync.revocation.v1",
+  "publishedAt": "2026-05-15T09:56:11+09:00",
+  "expiresAt": "2026-05-22T09:56:11+09:00",
+  "revokedOperatorKeys": [],
+  "trustedOperatorKeys": [],
+  "signature": "UNSIGNED",
+  "_note": "A1 placeholder — A4 에서 root key 가 trusted/revoked 목록 채우고 서명. 클라이언트는 A4 이전엔 unsigned-trust 모드로 동작 (binary 임베드 default trust list 사용)."
+}

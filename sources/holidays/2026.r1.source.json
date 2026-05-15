@@ -1,0 +1,24 @@
+{
+  "channelId": "holidays",
+  "version": "2026.r1",
+  "effectiveFrom": "2026-01-01",
+  "effectiveTo": null,
+  "sources": [
+    {
+      "label": "한국천문연구원 특일정보 OpenAPI",
+      "url": "https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo",
+      "params": { "solYear": "2026" },
+      "retrievedAt": "2026-05-15T09:00:00+09:00",
+      "sourceSha256": null,
+      "note": "A1 수동 발행 — 인증키 없이 자동 fetch 미구현. opub monitor 구현 이후 sha256 채움.",
+      "license": "공공누리 제1유형"
+    },
+    {
+      "label": "관공서의 공휴일에 관한 규정",
+      "url": "https://www.law.go.kr/법령/관공서의공휴일에관한규정",
+      "retrievedAt": "2026-05-15T09:00:00+09:00",
+      "license": "공공누리"
+    }
+  ],
+  "operatorNote": "2026년 음력 환산 + 대체공휴일 적용 결과. 한국천문연구원 API 응답과 1:1 비교 권고 (운영자 검증 PENDING)."
+}

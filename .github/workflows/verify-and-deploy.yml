@@ -1,0 +1,99 @@
+# verify-and-deploy.yml
+#
+# main 에 push 되면:
+#   1. JSON schema 검증 (artifacts/, sources/, manifest, revocation)
+#   2. operator 서명 검증 (manifest 의 keyId 가 revocation.json 의 trustedOperatorKeys 에 있는지)
+#   3. root 서명 검증 (revocation.json 의 signature)
+#   4. Cloudflare R2 로 mirror sync
+#   5. gh-pages 배포 (policy.openpharm.kr 의 백엔드)
+#
+# 서명 키는 GitHub Secrets 에 **없음**. publish.yml 은 verify + deploy 만.
+# (OPENPHARM_ADMIN_V1 §4.3 참조)
+
+name: verify-and-deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # gh-pages 푸시
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # A2 단계 — JSON schema 검증.
+      # schemas/ 가 admin repo 에 있으므로 opub-action 으로 받아서 검증.
+      - name: Verify schemas
+        run: |
+          echo "TODO A2 — opub verify schema artifacts/"
+          # 임시: jq 로 manifest.json 기본 구조만 확인
+          jq -e '.spec == "openpharm.sync.manifest.v1"' artifacts/*/manifest.json
+          jq -e '.snapshots | length > 0'              artifacts/*/manifest.json
+
+      # A3 단계 — operator 서명 검증.
+      - name: Verify operator signatures
+        run: |
+          echo "TODO A3 — opub verify signature artifacts/ --revocation revocation.json"
+          # 임시: signature = UNSIGNED 인 경우는 A1 placeholder 로 통과
+          for m in artifacts/*/manifest.json; do
+            sig=$(jq -r '.signature' "$m")
+            if [ "$sig" = "UNSIGNED" ]; then
+              echo "::warning::$m signature=UNSIGNED (A1 placeholder)"
+            fi
+          done
+
+      # A4 단계 — root 서명 검증 (revocation.json).
+      - name: Verify root signature
+        env:
+          OPENPHARM_ROOT_PUBKEY: ${{ vars.OPENPHARM_ROOT_PUBKEY }}
+        run: |
+          echo "TODO A4 — opub verify root revocation.json --pubkey \$OPENPHARM_ROOT_PUBKEY"
+          sig=$(jq -r '.signature' revocation.json)
+          if [ "$sig" = "UNSIGNED" ]; then
+            echo "::warning::revocation.json signature=UNSIGNED (A1 placeholder)"
+          fi
+
+      # A4 단계 — Cloudflare R2 mirror sync.
+      - name: R2 mirror sync
+        if: vars.R2_ENABLED == 'true'
+        env:
+          R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
+          R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
+          R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
+        run: |
+          echo "TODO A4 — rclone sync artifacts/ remote:openpharm-update-mirror/sync/"
+
+      # gh-pages 배포 — artifacts/* 의 디렉토리 구조를 sync/ 아래에 그대로 게시
+      - name: Build site
+        run: |
+          mkdir -p _site/sync
+          cp -r artifacts/* _site/sync/
+          cp revocation.json _site/sync/revocation.json
+          # 진단용 index 페이지 (외부 audit 진입점)
+          {
+            echo '<!doctype html><meta charset=utf-8><title>openpharm policy data</title>'
+            echo '<h1>openpharm-update — policy data CDN</h1>'
+            echo '<p>See <a href="https://github.com/openpharm/openpharm-update">README</a>.</p>'
+            echo '<ul>'
+            for ch in artifacts/*/; do
+              slug=$(basename "$ch")
+              echo "<li><a href=\"sync/$slug/manifest.json\">$slug</a></li>"
+            done
+            echo '</ul>'
+            echo '<p><a href="sync/revocation.json">revocation.json</a></p>'
+          } > _site/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
